@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "103155738508",
+    "project_id": "realtime-video-stream",
+    "storage_bucket": "realtime-video-stream.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:103155738508:android:293e289859c05db6e658a9",
+        "android_client_info": {
+          "package_name": "com.example.realtime_video_stream_task"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAk5O9K4mL1FaWJ77BR-gOJs1MB1CpGkj4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
