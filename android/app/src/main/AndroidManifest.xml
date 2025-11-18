@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="realtime_video_stream_task"
+        android:label="Realtime Video Stream"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
