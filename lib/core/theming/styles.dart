@@ -12,7 +12,7 @@ abstract class Styles {
   static TextStyle textStyle14 = TextStyle(
     fontSize: 14.spMin,
     fontWeight: FontWeight.w400,
-    color: kDarkBlackColor,
+    color: kSubTitleColor,
   );
 
   static TextStyle textStyle16 = TextStyle(
