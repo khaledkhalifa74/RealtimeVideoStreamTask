@@ -73,10 +73,21 @@ class NotificationService {
   static void _handleNavigationFromPayload(String payload) {
     if (payload.isEmpty) return;
 
-    final uri = Uri.parse(payload);
+    String type = "server"; // default
+    String videoUrl = payload;
 
-    final videoUrl = uri.queryParameters["url"] ?? "";
-    final type = uri.queryParameters["type"] ?? "server";
+    // Detect YouTube links
+    if (payload.contains("youtube.com") || payload.contains("youtu.be")) {
+      type = "youtube";
+      videoUrl = payload;
+    } else {
+      // Optionally parse custom payload URLs
+      final uri = Uri.tryParse(payload);
+      if (uri != null && uri.queryParameters.isNotEmpty) {
+        videoUrl = uri.queryParameters["url"] ?? payload;
+        type = uri.queryParameters["type"] ?? "server";
+      }
+    }
 
     rootNavigatorKey.currentContext?.go(
       "${Routes.videoPlayerScreen}?type=$type&url=$videoUrl",
