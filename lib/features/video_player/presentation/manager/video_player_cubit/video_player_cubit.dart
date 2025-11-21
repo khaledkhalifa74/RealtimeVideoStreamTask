@@ -17,22 +17,27 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
     ),
   );
 
+  void safeEmit(VideoPlayerState newState) {
+    if (!isClosed) emit(newState);
+  }
   void init() {
     /// Connect socket
     repository.connectToSocket((connected) {
-      emit(state.copyWith(isConnected: connected));
+      safeEmit(state.copyWith(isConnected: connected));
     });
 
     /// Likes
     repository.listenForLikes((data) {
-      emit(state.copyWith(likeCount: data["count"]));
+      if (!isClosed) {
+        safeEmit(state.copyWith(likeCount: data["count"]));
+      }
     });
 
     /// Viewer joined
     repository.listenForViewers((data) {
-      emit(state.copyWith(message: "${data['username']} joined"));
+      safeEmit(state.copyWith(message: "${data['username']} joined"));
       Future.delayed(const Duration(seconds: 2), () {
-        emit(state.copyWith(message: null));
+        safeEmit(state.copyWith(message: null));
       });
     });
   }
@@ -43,6 +48,7 @@ class VideoPlayerCubit extends Cubit<VideoPlayerState> {
 
   @override
   Future<void> close() {
+    repository.removeListeners();
     repository.disconnect();
     return super.close();
   }

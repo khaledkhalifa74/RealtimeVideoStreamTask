@@ -9,6 +9,14 @@ class VideoRepository {
     remote.connectSocket(onConnectionChange: onConnectionChange);
   }
 
+  void removeListeners() {
+    remote.removeAll();
+  }
+  // void removeAllListeners() {
+  //   remote.removeListener("like_update");
+  //   remote.removeListener("viewer_joined");
+  //   remote.removeListener("playback_status");
+  // }
   void sendPlaybackStatus(String status) {
     remote.sendEvent("playback_status", {"status": status});
   }

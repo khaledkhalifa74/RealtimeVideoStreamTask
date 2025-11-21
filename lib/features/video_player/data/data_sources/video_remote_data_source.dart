@@ -1,5 +1,4 @@
 import 'package:socket_io_client/socket_io_client.dart' as io;
-
 class VideoRemoteDataSource {
   io.Socket? socket;
 
@@ -14,22 +13,10 @@ class VideoRemoteDataSource {
           .build(),
     );
 
-    /// Listen for connection events
-    socket!.onConnect((_) {
-      onConnectionChange(true);
-    });
-
-    socket!.onDisconnect((_) {
-      onConnectionChange(false);
-    });
-
-    socket!.onConnectError((_) {
-      onConnectionChange(false);
-    });
-
-    socket!.onError((_) {
-      onConnectionChange(false);
-    });
+    socket!.onConnect((_) => onConnectionChange(true));
+    socket!.onDisconnect((_) => onConnectionChange(false));
+    socket!.onConnectError((_) => onConnectionChange(false));
+    socket!.onError((_) => onConnectionChange(false));
 
     socket!.connect();
   }
@@ -42,7 +29,15 @@ class VideoRemoteDataSource {
     socket?.on(event, handler);
   }
 
+  void removeListener(String event) {
+    socket?.off(event);
+  }
+
+  void removeAll() {
+    socket?.clearListeners();
+  }
+
   void disconnect() {
-    socket?.disconnect();
+    socket?.dispose();
   }
 }

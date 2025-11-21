@@ -9,6 +9,7 @@ class VideoPlayerState extends Equatable {
   final String? message;
   final bool isConnected;
 
+
   const VideoPlayerState({
     required this.sourceType,
     required this.videoUrl,

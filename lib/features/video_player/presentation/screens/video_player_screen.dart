@@ -41,8 +41,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         cubit.sendStatus(ytController!.value.isPlaying ? "playing" : "paused");
       });
     } else {
-      videoController =
-      VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
+      videoController = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl))
         ..initialize().then((_) {
           setState(() {});
           videoController!.addListener(() {
@@ -55,14 +54,18 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     return Scaffold(
       appBar: AppBar(title: const Text("Video Player")),
       body: BlocBuilder<VideoPlayerCubit, VideoPlayerState>(
         builder: (context, state) {
+          if (isLandscape) {
+            return Center(child: _buildPlayer(state));
+          }
           return Column(
             children: [
               _buildPlayer(state),
-              /// >>> NEW: SOCKET CONNECTION STATUS
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Text(
@@ -98,13 +101,46 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     }
 
     if (videoController != null && videoController!.value.isInitialized) {
-      return AspectRatio(
-        aspectRatio: videoController!.value.aspectRatio,
-        child: VideoPlayer(videoController!),
+      return Stack(
+        children: [
+          AspectRatio(
+            aspectRatio: videoController!.value.aspectRatio,
+            child: VideoPlayer(videoController!),
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            child: IconButton(
+              icon: Icon(
+                color: kWhiteColor,
+                size: 50,
+                videoController!.value.isPlaying
+                    ? Icons.pause_circle_filled_rounded
+                    : Icons.play_arrow_rounded,
+              ),
+              onPressed: () {
+                setState(() {
+                  if (videoController!.value.isPlaying) {
+                    videoController!.pause();
+                  } else {
+                    videoController!.play();
+                  }
+                });
+              },
+            ),
+          ),
+        ],
       );
     }
 
-    return const Center(child: CircularProgressIndicator());
+    return Column(
+      children: [
+        const SizedBox(height: 32),
+        const Center(child: CircularProgressIndicator()),
+      ],
+    );
   }
 
   @override
